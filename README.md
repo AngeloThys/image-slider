@@ -1,2 +1,3 @@
-# template
-A standard webpack, eslint and prettier template.
+# Image Slider
+
+A simple image slider
