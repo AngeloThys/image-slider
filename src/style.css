@@ -41,12 +41,18 @@ main {
 .slider-image {
   height: 100%;
   width: 100%;
+  background-color: var(--primary-green);
 }
 
 .slider-image img {
   height: 100%;
   width: 100%;
   object-fit: cover;
+  animation: fadeIn 500ms ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0.25; }
 }
 
 .slider-prev-arrow {

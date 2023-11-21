@@ -56,11 +56,13 @@ function generateNavCircles(amountOfImages) {
   const navCirclesList = [];
 
   navCirclesContainer.addEventListener("click", (event) => {
-    const navCircleImageNumber = event.target.dataset.imageNumber;
+    if (event.target.classList.contains("nav-circle")) {
+      const navCircleImageNumber = event.target.dataset.imageNumber;
 
-    setSliderImage(navCircleImageNumber);
-    removeActiveClasses();
-    setActiveNavCircle(navCircleImageNumber);
+      setSliderImage(navCircleImageNumber);
+      removeActiveClasses();
+      setActiveNavCircle(navCircleImageNumber);
+    }
   });
 
   for (let i = 0; i < amountOfImages; i++) {
