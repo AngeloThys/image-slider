@@ -1,17 +1,13 @@
 export function showImages() {
-  const imageUrlList = getImageUrls(4, "./images/");
-  const imageElementList = createImageElementList(imageUrlList);
-  const display = document.querySelector(".slider-image");
   const prevArrow = document.querySelector(".slider-prev-arrow");
   const nextArrow = document.querySelector(".slider-next-arrow");
 
   prevArrow.addEventListener("click", prevSlide);
   nextArrow.addEventListener("click", nextSlide);
 
-  generateNavCircles(imageUrlList.length);
+  generateNavCircles(4);
   autoSlide();
-
-  display.replaceChildren(imageElementList[0]);
+  setSlide(0);
 }
 
 function autoSlide() {
@@ -20,81 +16,58 @@ function autoSlide() {
 }
 
 function nextSlide() {
-  const currentImageNumber =
-    document.querySelector(".slider-image img").dataset.imageNumber;
-  const imageUrlList = getImageUrls(4, "./images/");
-  const imageElementList = createImageElementList(imageUrlList);
-  const display = document.querySelector(".slider-image");
+  const currentImageNumber = parseInt(
+    document.querySelector(".slider-image img").dataset.imageNumber,
+  );
+  let nextSlide;
 
-  switch (currentImageNumber) {
-    case "0":
-      display.replaceChildren(imageElementList[1]);
-      removeActiveClasses();
-      setActiveNavCircle(1);
-      break;
-    case "1":
-      display.replaceChildren(imageElementList[2]);
-      removeActiveClasses();
-      setActiveNavCircle(2);
-      break;
-    case "2":
-      display.replaceChildren(imageElementList[3]);
-      removeActiveClasses();
-      setActiveNavCircle(3);
-      break;
-    case "3":
-      display.replaceChildren(imageElementList[0]);
-      removeActiveClasses();
-      setActiveNavCircle(0);
-      break;
+  if (currentImageNumber === 3) {
+    nextSlide = 0;
+  } else {
+    nextSlide = currentImageNumber + 1;
   }
+
+  setSlide(nextSlide);
 }
 
 function prevSlide() {
-  const currentImageNumber =
-    document.querySelector(".slider-image img").dataset.imageNumber;
-    const imageUrlList = getImageUrls(4, "./images/");
-    const imageElementList = createImageElementList(imageUrlList);
-  const display = document.querySelector(".slider-image");
+  const currentImageNumber = parseInt(
+    document.querySelector(".slider-image img").dataset.imageNumber,
+  );
+  let prevSlide;
 
-  switch (currentImageNumber) {
-    case "0":
-      display.replaceChildren(imageElementList[3]);
-      removeActiveClasses();
-      setActiveNavCircle(3);
-      break;
-    case "1":
-      display.replaceChildren(imageElementList[0]);
-      removeActiveClasses();
-      setActiveNavCircle(0);
-      break;
-    case "2":
-      display.replaceChildren(imageElementList[1]);
-      removeActiveClasses();
-      setActiveNavCircle(1);
-      break;
-    case "3":
-      display.replaceChildren(imageElementList[2]);
-      removeActiveClasses();
-      setActiveNavCircle(2);
-      break;
+  if (currentImageNumber === 0) {
+    prevSlide = 3;
+  } else {
+    prevSlide = currentImageNumber - 1;
   }
+
+  setSlide(prevSlide);
+}
+
+function setSlide(imageNumber) {
+  setSliderImage(imageNumber);
+  removeActiveClasses();
+  setActiveNavCircle(imageNumber);
 }
 
 function generateNavCircles(amountOfImages) {
   const navCirclesContainer = document.querySelector(".slider-nav-circles");
   const navCirclesList = [];
 
+  navCirclesContainer.addEventListener("click", (event) => {
+    const navCircleImageNumber = event.target.dataset.imageNumber;
+
+    setSliderImage(navCircleImageNumber);
+    removeActiveClasses();
+    setActiveNavCircle(navCircleImageNumber);
+  });
+
   for (let i = 0; i < amountOfImages; i++) {
     const navCircle = document.createElement("span");
 
     navCircle.className = "nav-circle";
     navCircle.setAttribute("data-image-number", i);
-    navCircle.addEventListener("click", () => {
-      setSliderImage(i);
-      removeActiveClasses();
-      setActiveNavCircle(i);
-    });
 
     navCirclesList.push(navCircle);
   }
@@ -124,7 +97,9 @@ function setActiveNavCircle(imageNumber) {
   const navCircleElementList = document.querySelectorAll(".nav-circle");
 
   navCircleElementList.forEach((navCircleElement) => {
-    if (parseInt(navCircleElement.dataset.imageNumber) === imageNumber) {
+    if (
+      parseInt(navCircleElement.dataset.imageNumber) === parseInt(imageNumber)
+    ) {
       navCircleElement.classList.add("active");
     }
   });
